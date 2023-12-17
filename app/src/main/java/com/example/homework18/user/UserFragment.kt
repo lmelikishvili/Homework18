@@ -53,5 +53,4 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::infl
             }
         }
     }
-
 }
