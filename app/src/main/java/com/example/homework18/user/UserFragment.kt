@@ -42,7 +42,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::infl
             }
             if(response.isSuccessful && response.body() != null){
                 for (user in response.body()!!.data){
-                    users.add(User(user.id, user.first_name, user.last_name, user.email, user.avatar))
+                    users.add(User(id = user.id, firsName =user.first_name, lastName = user.last_name, email = user.email, avatar = user.avatar))
                 }
                 with(binding){
                     usersRecyclerView.adapter = adapter

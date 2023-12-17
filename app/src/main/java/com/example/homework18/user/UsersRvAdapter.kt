@@ -40,8 +40,8 @@ class UsersRvAdapter : ListAdapter<User, UsersRvAdapter.UserVH>(UsetDiffUtil()) 
             user = currentList[adapterPosition]
             with(binding) {
                 tvID.text = "ID ${user.id}"
-                tvName.text = "Name: ${user.firsName} ${user.email}"
-                tvEmail.text = "Email: ${user.lastName}"
+                tvName.text = "Name: ${user.firsName} ${user.lastName}"
+                tvEmail.text = "Email: ${user.email}"
             }
             Glide.with(binding.root)
                 .load(user.avatar)
