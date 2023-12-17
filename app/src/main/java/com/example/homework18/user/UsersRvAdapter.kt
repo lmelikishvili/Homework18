@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.homework18.databinding.UserItemBinding
 
-class UsersRvAdapter: ListAdapter<User, UsersRvAdapter.UserVH>(UsetDiffUtil()) {
+class UsersRvAdapter : ListAdapter<User, UsersRvAdapter.UserVH>(UsetDiffUtil()) {
 
-    class UsetDiffUtil: DiffUtil.ItemCallback<User>(){
+
+    class UsetDiffUtil : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.id == newItem.id
         }
@@ -20,23 +22,30 @@ class UsersRvAdapter: ListAdapter<User, UsersRvAdapter.UserVH>(UsetDiffUtil()) {
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserVH = UserVH(UserItemBinding.inflate(
-        LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserVH = UserVH(
+        UserItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+    )
 
     override fun onBindViewHolder(holder: UserVH, position: Int) {
         holder.bind()
     }
 
 
-    inner class UserVH(private val binding: UserItemBinding): RecyclerView.ViewHolder(binding.root){
+    inner class UserVH(private val binding: UserItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private lateinit var user: User
-        fun bind(){
+        fun bind() {
             user = currentList[adapterPosition]
-            with(binding){
+            with(binding) {
                 tvID.text = "ID ${user.id}"
                 tvName.text = "Name: ${user.firsName} ${user.email}"
                 tvEmail.text = "Email: ${user.lastName}"
             }
+            Glide.with(binding.root)
+                .load(user.avatar)
+                .into(binding.userImage)
         }
     }
 }
