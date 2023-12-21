@@ -9,3 +9,4 @@ sealed class Resource<D>(
     class Error<D>(errorMessage: String) : Resource<D>(errorMessage = errorMessage)
     class Loading<D>(loading: Boolean) : Resource<D>(loading = loading)
 }
+//new branch test
