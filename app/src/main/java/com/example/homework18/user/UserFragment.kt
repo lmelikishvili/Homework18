@@ -1,26 +1,26 @@
 package com.example.homework18.user
 
-import android.util.Log.d
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.homework18.BaseFragment
 import com.example.homework18.databinding.FragmentUserBinding
-import com.example.homework18.utils.RetrofitInstance
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::inflate) {
     private val viewModel: UserViewModel by viewModels()
-    private lateinit var users: MutableList<User>
     private val adapter: UsersRvAdapter by lazy {
         UsersRvAdapter()
     }
 
     override fun setup() {
-        users = mutableListOf()
-        getAllUsers()
-
+        viewModel.getUsers()
+        with(binding) {
+            usersRecyclerView.adapter = adapter
+            usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     override fun setupListeners() {
@@ -28,28 +28,11 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::infl
     }
 
     override fun bindData() {
-
-    }
-
-    private fun getAllUsers(){
-        lifecycleScope.launch() {
-            val response = try {
-                RetrofitInstance.api.getUsers()
-            }catch (e: IOException){
-                return@launch
-            }catch (e: retrofit2.HttpException){
-                return@launch
-            }
-            if(response.isSuccessful && response.body() != null){
-                for (user in response.body()!!.data){
-                    users.add(User(id = user.id, firsName =user.first_name, lastName = user.last_name, email = user.email, avatar = user.avatar))
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userFlow.collect {
+                    adapter.submitList(it)
                 }
-                with(binding){
-                    usersRecyclerView.adapter = adapter
-                    usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-                    adapter.submitList(users)
-                }
-                d("UsersList", "${users}")
             }
         }
     }

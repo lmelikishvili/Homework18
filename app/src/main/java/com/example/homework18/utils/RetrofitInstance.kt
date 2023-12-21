@@ -9,7 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object RetrofitInstance {
     val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     val api: Api by lazy {
-       Retrofit.Builder()
+        Retrofit.Builder()
             .baseUrl(Utils.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
